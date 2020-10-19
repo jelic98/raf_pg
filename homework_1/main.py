@@ -78,6 +78,9 @@ class App(Frame):
         # Read WAV file
         raw = wf.read(path)
         self.sample_rate, self.data = raw[0], raw[1]
+        start = int(self.sample_rate * self.sample_start.get() / 1000)
+        end = int(self.sample_rate * self.sample_end.get() / 1000)
+        self.data = self.data[start:end]
         # Perform endpointing
         dur_noise = 0.1
         n_noise = int(self.sample_rate * dur_noise)
@@ -89,8 +92,9 @@ class App(Frame):
         p, q = 3, 3
         window_replace(windows, 0, 1, p)
         i, j = window_replace(windows, 1, 0, q)
-        self.data = self.data[i*n_window:j*n_window]
-        if sum(w for w in windows) == 0:
+        if j - i > 0:
+            self.data = self.data[i*n_window:j*n_window]
+        else:
             mb.showerror("Error", "No spoken word detected")
 
     def action_synthesize(self):
