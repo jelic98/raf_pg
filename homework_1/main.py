@@ -44,7 +44,7 @@ class App(Frame):
         self.data = self.data[self.rate*self.start.get()//1000:self.rate*self.end.get()//1000]
         self.length = len(self.data)
         # Endpointing
-        p, q = 3, 3
+        p, q = 25, 25
         dur_noise, dur_window = 0.1, 0.01
         n_noise, n_window = int(self.rate * dur_noise), int(self.rate * dur_window)
         noise = np.abs(self.data[:n_noise])
