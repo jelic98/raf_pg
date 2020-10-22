@@ -52,7 +52,7 @@ class App(Frame):
         windows = [1 if np.mean(np.abs(self.data[i:i+n_window])) > lmt else 0 for i in range(0, self.length, n_window)]
         self.window_replace(windows, 0, 1, p)
         i, j = self.window_replace(windows, 1, 0, q)
-        if j - i == 0:
+        if j - i < q:
             mb.showerror("Error", "Only silence detected")
             return
         self.data = self.data[i*n_window:j*n_window]
