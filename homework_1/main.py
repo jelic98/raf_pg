@@ -16,13 +16,13 @@ class App(Frame):
         Label(self, text="Path").grid(row=0, column=0, padx=10, pady=10)
         Entry(self, textvariable=self.path).grid(row=0, column=1, padx=10, pady=10)
 
-        self.start = IntVar(self, value=0)
-        Label(self, text="Sample start (ms)").grid(row=1, column=0, padx=10, pady=10)
-        Entry(self, textvariable=self.start).grid(row=1, column=1, padx=10, pady=10)
+        self.win_size = IntVar(self, value=100)
+        Label(self, text="Window size (ms)").grid(row=1, column=0, padx=10, pady=10)
+        Entry(self, textvariable=self.win_size).grid(row=1, column=1, padx=10, pady=10)
 
-        self.end = IntVar(self, value=5000)
-        Label(self, text="Sample end (ms)").grid(row=2, column=0, padx=10, pady=10)
-        Entry(self, textvariable=self.end).grid(row=2, column=1, padx=10, pady=10)
+        self.win_num = IntVar(self, value=1)
+        Label(self, text="Window number").grid(row=2, column=0, padx=10, pady=10)
+        Entry(self, textvariable=self.win_num).grid(row=2, column=1, padx=10, pady=10)
 
         self.win_funs = {"Hanning":0, "Hamming":1, "None":2}
         self.win_fun = IntVar(self, value=0)
@@ -41,7 +41,6 @@ class App(Frame):
         # Reading WAV file
         raw = wf.read(self.path.get())
         self.rate, self.data = raw[0], raw[1]
-        self.data = self.data[self.rate*self.start.get()//1000:self.rate*self.end.get()//1000]
         self.length = len(self.data)
         # Endpointing
         p, q = 25, 25
@@ -60,14 +59,19 @@ class App(Frame):
         # Windowing function
         win_funs = [np.hanning, np.hamming, np.ones]
         self.data = self.data * win_funs[self.win_fun.get()](self.length)
+        # Window slicing
+        win_size, win_num = self.win_size.get(), self.win_num.get()
+        win_start, win_end = win_size * (win_num - 1), win_size * win_num
+        self.data = self.data[self.rate*win_start//1000:self.rate*win_end//1000]
+        self.length = len(self.data)
         # Discrete Fourier Transform
         self.freq = np.linspace(1000 // (self.length / self.rate), self.rate // 2, self.length)
         self.amp = np.abs(np.fft.fft(self.data))
         self.amp = np.interp(self.amp, (self.amp.min(), self.amp.max()), (0, 100))
 
     def action_synthesize(self):
-        path, length = self.path.get(), (self.end.get() - self.start.get()) // 1000
-        rate, freqs = 44100, [220, 480, 620]
+        path = self.path.get()
+        length, rate, freqs = 5, 44100, [220, 480, 620]
         data, t = np.zeros(rate * length), np.linspace(0, length, rate * length)
         for f in freqs:
             data = np.add(data, np.sin(f * 2 * np.pi * t))
