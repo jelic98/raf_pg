@@ -2,6 +2,8 @@
 
 # RAF PG
 
-Homeworks and project from *"Speech Recognition"* course at Faculty of Computing in Belgrade.
+Homeworks from *"Speech Recognition"* course at Faculty of Computing in Belgrade.
 
 Homework 1: [statement](https://github.com/jelic98/raf_pg/blob/main/homework_1/homework_1.pdf), [implementation](https://github.com/jelic98/raf_pg/tree/main/homework_1)
+
+Homework 2: [statement](https://github.com/jelic98/raf_pg/blob/main/homework_2/homework_2.pdf), [implementation](https://github.com/jelic98/raf_pg/tree/main/homework_2)
