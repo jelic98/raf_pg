@@ -1,0 +1,10 @@
+male,1,river,impression,guitar
+male,2,pollution,manufacturer,possession
+male,3,family,discussion,competition
+male,4,analyst,orientation,spider
+male,5,auction,opposition,trustee
+female,1,river,impression,guitar
+female,2,pollution,manufacturer,possession
+female,3,family,discussion,competition
+female,4,welfare,comfortable,scatter
+female,5,bullet,opera,appreciate
