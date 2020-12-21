@@ -1,46 +1,37 @@
+# CONSTANTS BEGIN
+
+LIB_DIR = 'Real-Time-Voice-Cloning'
+
+TEXT = "Companies scramble to define the future of work as COVID-19 lingers"
+
+SAMPLE_IN = 'data/1.wav'
+SAMPLE_OUT = 'out/1.wav'
+
+MODEL_ENCODER = 'Real-Time-Voice-Cloning/encoder/saved_models/pretrained.pt'
+MODEL_VOCODER = 'Real-Time-Voice-Cloning/vocoder/saved_models/pretrained/pretrained.pt'
+MODEL_SYNTESIZER = 'Real-Time-Voice-Cloning/synthesizer/saved_models/logs-pretrained/taco_pretrained'
+
+# CONSTANTS END
+
 import os
 import sys
 import numpy as np
+import scipy.io.wavfile as wf
 from pathlib import Path
-from os.path import exists, join, basename, splitext
+
+sys.path.insert(0, LIB_DIR)
+
 from encoder import inference as encoder
-from synthesizer import inference as synthesizer
 from vocoder import inference as vocoder
+from synthesizer.inference import Synthesizer
 
-encoder.load_model(Path('encoder/saved_models/pretrained.pt'))
-vocoder.load_model(Path('vocoder/saved_models/pretrained/pretrained.pt'))
-synthesizer = Synthesizer(Path('synthesizer/saved_models/logs-pretrained/taco_pretrained'))
+encoder.load_model(Path(MODEL_ENCODER))
+vocoder.load_model(Path(MODEL_VOCODER))
+synthesizer = Synthesizer(Path(MODEL_SYNTESIZER))
 
-RATE = 44100
-embedding = None
+data, rate = encoder.preprocess_wav(Path(SAMPLE_IN))
+embed = encoder.embed_utterance(data)
+specs = synthesizer.synthesize_spectrograms([TEXT], [embed])
+data = vocoder.infer_waveform(specs[0])
 
-def compute_embedding(audio):
-    global embedding
-    display(Audio(audio, rate=RATE, autoplay=True))
-    embedding = encoder.embed_utterance(encoder.preprocess_wav(audio, RATE))
-
-def click_record(button):
-    clear_output()
-    audio = record_audio(duration, sample_rate=RATE)
-    compute_embedding(audio)
-
-def click_upload(button):
-    clear_output()
-    audio = upload_audio(sample_rate=RATE)
-    compute_embedding(audio)
-
-if source == "Record":
-    button = widgets.Button(description="Record your voice")
-    button.on_click(click_record)
-    display(button)
-else:
-    button = widgets.Button(description="Upload voice file")
-    button.on_click(click_upload)
-    display(button)
-
-text = "Companies scramble to define the future of work as COVID-19 lingers"
-specs = synthesizer.synthesize_spectrograms([text], [embedding])
-generated_wav = vocoder.infer_waveform(specs[0])
-generated_wav = np.pad(generated_wav, (0, synthesizer.sample_rate), mode="constant")
-clear_output()
-display(Audio(generated_wav, rate=synthesizer.sample_rate, autoplay=True))
+wf.write(SAMPLE_OUT, rate, data)
