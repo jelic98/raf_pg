@@ -12,4 +12,4 @@ Homework 2: [statement](https://github.com/jelic98/raf_pg/blob/main/homework_2/h
 
 Project: [statement](https://github.com/jelic98/raf_pg/blob/main/project/project.pdf),
 [implementation](https://github.com/jelic98/raf_pg/tree/main/project),
-[implementation](https://github.com/jelic98/raf_pg/tree/main/project/report.pdf)
+[report](https://github.com/jelic98/raf_pg/tree/main/project/report.pdf)
