@@ -1,15 +1,19 @@
 # CONSTANTS BEGIN
 
-LIB_DIR = 'Real-Time-Voice-Cloning'
-
-TEXT = "Companies scramble to define the future of work as COVID-19 lingers"
+TEXT = "Companies like Google and Facebook scramble to define the future of work as COVID-19 lingers"
 
 SAMPLE_IN = 'data/1.wav'
 SAMPLE_OUT = 'out/1.wav'
 
-MODEL_ENCODER = 'Real-Time-Voice-Cloning/encoder/saved_models/pretrained.pt'
-MODEL_VOCODER = 'Real-Time-Voice-Cloning/vocoder/saved_models/pretrained/pretrained.pt'
-MODEL_SYNTESIZER = 'Real-Time-Voice-Cloning/synthesizer/saved_models/logs-pretrained/taco_pretrained'
+LIB_DIR = 'Real-Time-Voice-Cloning'
+
+MODEL_ENCODER = f'{LIB_DIR}/encoder/saved_models/pretrained.pt'
+MODEL_VOCODER = f'{LIB_DIR}/vocoder/saved_models/pretrained/pretrained.pt'
+MODEL_SYNTESIZER = f'{LIB_DIR}/synthesizer/saved_models/logs-pretrained/taco_pretrained'
+
+# LOCALLY TRAINED MODELS
+# MODEL_SYNTESIZER = f'{LIB_DIR}/synthesizer/saved_models/logs-my_run/taco_pretrained'
+# MODEL_VOCODER = f'{LIB_DIR}/vocoder/saved_models/my_run/my_run.pt'
 
 # CONSTANTS END
 
